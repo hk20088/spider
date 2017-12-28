@@ -6,7 +6,9 @@ __author__='Leon Hu'
 import requests
 import os
 import time
+import random
 from bs4 import BeautifulSoup
+from day6 import fillips
 
 url_home = 'https://www.liaoxuefeng.com'  # 主页
 url_first = '/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000'  # Python3教程首页
@@ -20,9 +22,23 @@ headers = {'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image
 
 cookies = {'Hm_lpvt_2efddd14a5f2b304677462d06fb4f964':'1514276914', 'Hm_lvt_2efddd14a5f2b304677462d06fb4f964':'1513759510,1513840593,1514170543,1514272126' }
 
-# 请求网页函数
+# 使用代理IP请求网页
 def request(url):
-    return requests.get(url,headers=headers, cookies=cookies)
+    proxies = fillips('f:/ipss.txt') # 封装从网上抓取的代理IP
+    while True:
+        # 随机从IP池中取出代理IP去请求网页
+        proxy = random.choice(proxies)
+        try:
+            res = requests.get(url,headers=headers, cookies=cookies, proxies = proxy,timeout = 3)  # 设置超时时间为 3秒
+            if res.status_code == requests.codes.ok:
+                break
+        except Exception:
+            continue
+
+    return res
+
+
+
 
 # 创建目录
 def mkdir(path):
