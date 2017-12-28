@@ -89,4 +89,4 @@ for h in hrefs:
         f.write(str(div_content)) # 将div内容转化为str
 
 end = time.time()
-print('抓取完毕，使用时间 %s 秒' % (start - end))
+print('抓取完毕，使用时间 %s 秒' % (end - start))
